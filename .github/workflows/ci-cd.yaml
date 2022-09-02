@@ -21,7 +21,7 @@ on:
       export MODEL2_ID = 'Model_2
       export CONTAINER_IMAGE = 'gcr.io/pritish-vertex-ai/mpg:v1'
       export PROJECT= pritish-vertex-ai
-      gcloud auth activate-service-account =$SERVICE_ACCOUNT --key-file=${{ secrets.temp.json }} --project=$PROJECT
+      gcloud auth activate-service-account =$SERVICE_ACCOUNT --key-file=${{ secrets.GCP_CRED }} --project=$PROJECT
       python3 auto.py
 
 
