@@ -15,8 +15,8 @@ jobs:
   Pass-variables-to-runtime:
     name : Authenticate GCP
     runs-on : cicirello/pyaction:latest
-    steps : install cli
-    uses : actions/checkout@v3
+    steps : 
+      - uses : actions/checkout@v3
     RUN : |
       sudo apt-get install google-cloud-cli
       export SERVICE_ACCOUNT - 'qwertytestvai@pritish-vertex-ai.iam.gserviceaccount.com'
