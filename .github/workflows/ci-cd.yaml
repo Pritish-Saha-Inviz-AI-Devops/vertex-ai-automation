@@ -3,9 +3,14 @@ on:
   workflow_dispatch:
     inputs:
       logLevel:
-        default: warning
-        description: "Log level"
+        description: 'Log level'
         required: true
+        default: 'warning' 
+        type: choice
+        options:
+        - info
+        - warning
+        - debug 
   jobs:
     Pass-variables-to-runtime
     #name : Authenticate GCP
