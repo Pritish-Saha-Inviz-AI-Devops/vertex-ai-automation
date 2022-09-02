@@ -8,7 +8,7 @@ on:
         required: true
   jobs:
     Pass-variables-to-runtime
-    name: Authenticate GCP
+    #name : Authenticate GCP
     runs-on: cicirello/pyaction:latest
     RUN: |
       sudo apt-get install google-cloud-cli
