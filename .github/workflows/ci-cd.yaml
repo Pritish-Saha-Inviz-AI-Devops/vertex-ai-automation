@@ -19,18 +19,18 @@ jobs:
     steps : 
       - uses : actions/checkout@v3
       - run : |
-        sudo apt-get install google-cloud-cli
-        export SERVICE_ACCOUNT - 'qwertytestvai@pritish-vertex-ai.iam.gserviceaccount.com'
-        export REGION= 'us-central1'
-        export ENDPOINT_NAME = 'vertex-ai-ep'
-        export MODEL_NAME1 = 'Model_1'
-        export MODEL1_ID = 'MY_MODEL_01'
-        export MODEL_NAME2= 'Model_2'
-        export MODEL2_ID = 'Model_2
-        export CONTAINER_IMAGE = 'gcr.io/pritish-vertex-ai/mpg:v1'
-        export PROJECT= pritish-vertex-ai
-        gcloud auth activate-service-account =$SERVICE_ACCOUNT --key-file=${{ secrets.GCP_CRED }} --project=$PROJECT
-        python3 auto.py
+          sudo apt-get install google-cloud-cli
+          export SERVICE_ACCOUNT - 'qwertytestvai@pritish-vertex-ai.iam.gserviceaccount.com'
+          export REGION= 'us-central1'
+          export ENDPOINT_NAME = 'vertex-ai-ep'
+          export MODEL_NAME1 = 'Model_1'
+          export MODEL1_ID = 'MY_MODEL_01'
+          export MODEL_NAME2= 'Model_2'
+          export MODEL2_ID = 'Model_2
+          export CONTAINER_IMAGE = 'gcr.io/pritish-vertex-ai/mpg:v1'
+          export PROJECT= pritish-vertex-ai
+          gcloud auth activate-service-account =$SERVICE_ACCOUNT --key-file=${{ secrets.GCP_CRED }} --project=$PROJECT
+          python3 auto.py
 
 
 
