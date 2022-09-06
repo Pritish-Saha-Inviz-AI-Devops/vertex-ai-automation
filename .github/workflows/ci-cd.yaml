@@ -1,3 +1,4 @@
+
 name: Vertex Ai  Automation
 #
 on:
@@ -6,19 +7,23 @@ on:
       logLevel:
         description: 'Log level'
         required: true
-        default: 'warning' 
+        default: 'warning'
         type: choice
         options:
           - info
           - warning
-          - debug 
+          - debug
 jobs:
-  Pass-variables-to-runtime:
-    name : Authenticate GCP
-    runs-on : cicirello/pyaction:latest
-    steps : 
-      - uses : actions/checkout@v3
-      - run : |
+  automate-deployment-on-Vertex-AI :
+    runs-on : ubuntu-latest
+    env:
+      gcp_credential: ${{secrets.GCP_CRED}}
+    steps :
+      - name: Authenticate
+      #- uses : actions/checkout@v3
+        run : |
+          touch temp.json
+          echo $gcp_credential > temp.json
           sudo apt-get install google-cloud-cli
           export SERVICE_ACCOUNT - 'qwertytestvai@pritish-vertex-ai.iam.gserviceaccount.com'
           export REGION= 'us-central1'
@@ -26,17 +31,63 @@ jobs:
           export MODEL_NAME1 = 'Model_1'
           export MODEL1_ID = 'MY_MODEL_01'
           export MODEL_NAME2= 'Model_2'
-          export MODEL2_ID = 'Model_2
+          export MODEL2_ID = 'MY_Model_02'
           export CONTAINER_IMAGE = 'gcr.io/pritish-vertex-ai/mpg:v1'
           export PROJECT= pritish-vertex-ai
-          gcloud auth activate-service-account =$SERVICE_ACCOUNT --key-file=${{ secrets.GCP_CRED }} --project=$PROJECT
-          python3 auto.py
+          gcloud auth activate-service-account =$SERVICE_ACCOUNT --key-file=temp.json --project=$PROJECT
 
+      - name : Create First Model
+        run : |
+          gcloud ai models upload --region=$REGION \
+          --display-name=$MODEL_NAME1 \
+          --container-image-uri=$CONTAINER_IMAGE \
+          --models-id$MODEL1_ID
 
+      - name : Create Second Model
+        run : |
+          gcloud ai models upload --region=$REGION \
+          --display-name=$MODEL_NAME2 \
+          --container-image-uri=$CONTAINER_IMAGE \
+          --models-id$MODEL2_ID
 
+      - name : Create Endpoint
+        run: |
+          gcloud ai endpoints create --region=$REGION
+          --display-name=$ENDPOINT_NAME
 
+      - name : Deploy Model
+        run: |
+          gcloud ai endpoints deploy-model --region=$REGION \
+          --model=$MODEL1_ID
+          --display-name=$MODEL_NAME1\
+          --machine-type=n1-standard-4 \
+          --min-replica-count=1 \
+          --max-replica-count=2 \
+          --traffic-split=0=100
 
+      - name : Deploy Model1
+        run: |
+          gcloud ai endpoints deploy-model --region=$REGION \
+          --model=$MODEL1_ID
+          --display-name=$MODEL_NAME1\
+          --machine-type=n1-standard-4 \
+          --min-replica-count=1 \
+          --max-replica-count=2 \
+          --traffic-split=0=100
 
+      - name : Deploy Model2
+        run: |
+          gcloud ai endpoints deploy-model --region=$REGION \
+          --model=$MODEL2_ID
+          --display-name=$MODEL_NAME2\
+          --machine-type=n1-standard-4 \
+          --min-replica-count=1 \
+          --max-replica-count=2 \
+          --traffic-split=0=40 , $MODEL1_ID=60
+
+      - name : delete service key
+        run: |
+          rm temp.json
 
 
 
